@@ -15,6 +15,7 @@ I use `-v` to map a volume. My folder "/home/user/dev" exists on the DGX, and it
 I use `-p` to map the ports. By default, Jupyter will initialise on port 8888. You can map it to port 8888 on the DGX, but it might be best to check if port 8888 is busy or not first.
 I set the working directory with -w, but it doesn't seem to have any effect on this particular image - the jupyter notebook server is always started in the same directory ("/tf").
 Note that I figured out which folder the jupyter server is in by doing `pwd` on the notebook commandline.
+You can also add `bash` to the end of the command line to get into the container itself, and if you don't set the working directory, it'll take you to /tf.
 ## Step 4.
 Access the notebooks. On your own machine, go to **<DGX address>:<DGX port>/<some token)**. When the container starts up on the DGX, it will give you the address to visit, including a token. This is the password security provided by the image. Include it when you open the notebook in your browser.
 ## Step 5.
