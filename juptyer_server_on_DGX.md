@@ -23,4 +23,28 @@ Save your files. Remember to save any ipynb files to the directory that you mapp
 ## Step 6.
 Tidy up. If you are (completely) done with your container, remember to use `docker stop <container name>` and  `docker rm <container name>` to remove the stopped container.
 ## Extras
-You can use `ctrl+(p,q)` to step out of the container without stopping it and look at the DGX without multiple log-ins. Use `docker attach <container name>` to step back in. Check that the DGX is running your code on a GPU using `nvidia-smi`, in my case, it ran the code on GPU 0. I didn't find any way to change this. When running code directly from the commandline within a Docker container, you can use `CUDA_VISIBLE_DEVICES=0,1,2` to tell the code to use only GPUs 0, 1 and 2.
+You can use `ctrl+(p,q)` (on a mac) to step out of the container without stopping it and look at the DGX without multiple log-ins. Use `docker attach <container name>` to step back in. Check that the DGX is running your code on a GPU using `nvidia-smi`, in my case, it ran the code on all the GPUs (which you can tell because the memory on every GPU was more than 0 and every GPU had a process associated with it).
+
+# **OH NO! It's using ALL the GPUs on the DGX!**
+So, if you follow the above commands, as soon as you start running a python notebook it takes up all the GPUs on the DGX. This is ok if nobody is using it, but it is a shared resource, so it's something to avoid. Here is a way around it.
+## Inspect the docker image
+`docker inspect -f '{{.Config.Cmd}}' tensorflow/tensorflow:latest-gpu-jupyter`
+This command allows you to find out the commands that the image actually runs when you start up the container (replace "tensorflow/tensorflow:latest-gpu-jupyter" with any other image name). In this case, it runs:
+`bash -c source /etc/bash.bashrc && jupyter notebook --notebook-dir=/tf --ip 0.0.0.0 --no-browser --allow-root`
+This means that you can get the same effect by running:
+`nvidia-docker run -ti --name pamela -v /home/user/dev:/tf/mydev -p 8888:8888 tensorflow/tensorflow:latest-gpu-jupyter bash`
+And then running:
+`jupyter notebook --notebook-dir=/tf --ip 0.0.0.0 --no-browser --allow-root`
+from **inside** the container. And *this* allows you to set different settings for jupyter (i.e. setting a different port number, although the actual port is selected by the port mappings with the `-p` option in nvidia-docker run). So, for example, you could `cd` to a specific directory (if you've mounted a specific directory and want to run the jupyter server from there). And you could install stuff in your image (if, say, you wanted to use OpenCV or other Python packages that aren't already installed in the container).
+## Restrict the visible number of GPUs
+Most importantly, this means that you can restrict the DGX to running on a single GPU by running (inside the container):
+`CUDA_VISIBLE_DEVICES=7 jupyter notebook --notebook-dir=/tf --ip 0.0.0.0 --no-browser --allow-root`
+In this case, I've opted for GPU number 7, but values 0,1,2,3,4,5,6 are also available on the DGX. Note that *inside* the container, the GPUs will have their own names. The python notebook test.ipynb has some code to look at that.
+
+Remember that  `ctrl+(p,q)` lets you step out of the container without stopping it and  `docker attach <container name>` lets you step back inside.
+
+# Some useful links
+[Tensorflow versions of docker and how to pull them from dockerhub and run them](https://www.tensorflow.org/install/docker).
+[Docker run options](https://docs.docker.com/v17.12/edge/engine/reference/commandline/run/).
+[Running a Dockerized Jupyter Server for Data Science](https://www.dataquest.io/blog/docker-data-science/).
+
