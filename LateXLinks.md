@@ -7,15 +7,15 @@
 
 
 5. The following code will get rid of images and tables in a document:
-> % For Turnitin
-> \usepackage{bibentry}
-> \usepackage{comment}
-> \excludecomment{figure}
-> \let\endfigure\relax
-> \expandafter\let\csname figure*\endcsname\figure
-> \expandafter\let\csname endfigure*\endcsname\endfigure
-> \excludecomment{tabular}
-> \let\endtabular\relax
+> % For Turnitin  
+> \usepackage{bibentry}  
+> \usepackage{comment}  
+> \excludecomment{figure}  
+> \let\endfigure\relax  
+> \expandafter\let\csname figure*\endcsname\figure  
+> \expandafter\let\csname endfigure*\endcsname\endfigure  
+> \excludecomment{tabular}  
+> \let\endtabular\relax  
 
 
 6. If you've compiled something using your "everything" .bib file and want to get a .bib file that has ONLY the correct references in it, use this:
