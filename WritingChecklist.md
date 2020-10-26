@@ -28,7 +28,9 @@
   - Do you actually USE every figure (i.e. refer to it from within the text)?
   - Are they consistently captioned?
   - Figure captions at the bottom.
+  - Cite the source (if relevant).
   - Are they conveniently positioned close to where they're used?
+  - Check the image quality in the final document.
 
 5. Check tables.
   - Do you use all the tables within the body of text?
