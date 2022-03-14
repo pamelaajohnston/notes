@@ -36,3 +36,7 @@
   - Do you use all the tables within the body of text?
   - Are tables legible?
   - Table titles at the top.
+  
+  # Some good links:
+  [A presentation about writing conference papers by Eamonn Keogh](http://www.cs.ucr.edu/~eamonn/public/SDM_How_to_do_Research_Keogh.pdf?)
+  [An article about writing for machine learning conferences](http://approximatelycorrect.com/2018/01/29/heuristics-technical-scientific-writing-machine-learning-perspective/)
